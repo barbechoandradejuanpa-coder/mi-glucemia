@@ -636,8 +636,15 @@
       if(isNaN(v)||v<10){ el.textContent=''; el.className='value-preview'; checkForm(); return; }
       let cls='value-preview '; let txt='';
       if(v<70){ cls+='badge-low'; txt='⬇ Bajo ('+v+')'; }
-      else if(v>180){ cls+='badge-high'; txt='⬆ Alto ('+v+')'; }
-      else { cls+='badge-ok'; txt='✓ En rango ('+v+')'; }
+     else if(tipoSeleccionado === 'ayunas' && v > 130){
+  cls+='badge-high'; txt='↑ Alto ('+v+')';
+}
+else if(v > 180){
+  cls+='badge-high'; txt='↑ Alto ('+v+')';
+}
+else {
+  cls+='badge-ok'; txt='✓ En rango ('+v+')';
+}
       el.className=cls; el.textContent=txt;
       checkForm();
     }
