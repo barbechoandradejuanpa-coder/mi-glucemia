@@ -895,11 +895,15 @@
     function exportCSV(data, mes){
       const tipoLabel = {};
       TIPOS.forEach(t=>tipoLabel[t.id]=t.label);
-      const rangeLabel = v=>v<70?'Bajo':v>180?'Alto':'En rango';
+     const rangeLabel = (v, tipo) => {
+  if (v < 70) return 'Bajo';
+  if (tipo === 'ayunas') return v <= 130 ? 'En rango' : 'Alto';
+  return v <= 180 ? 'En rango' : 'Alto';
+};
       const sorted = [...data].sort((a,b)=>(a.fecha+a.hora).localeCompare(b.fecha+b.hora));
       let csv = 'Fecha,Hora,Glucemia (mg/dL),Tipo,Rango,Novedades\n';
       sorted.forEach(r=>{
-        csv += `${r.fecha},${r.hora},${r.valor},"${tipoLabel[r.tipo]||r.tipo}",${rangeLabel(r.valor)},"${r.novedades||''}"\n`;
+        csv += `${r.fecha},${r.hora},${r.valor},"${tipoLabel[r.tipo]||r.tipo}",${rangeLabel(r.valor, r.tipo)},"${r.novedades||''}"\n`;
       });
       const blob = new Blob([csv],{type:'text/csv;charset=utf-8;'});
       const url = URL.createObjectURL(blob);
