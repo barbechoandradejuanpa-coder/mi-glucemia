@@ -36,7 +36,7 @@
         .auth-buttons{display:flex; gap:8px; margin-top:8px; flex-wrap:wrap;}
         .auth-btn{background:rgba(255,255,255,0.2); border:1px solid rgba(255,255,255,0.4); color:white; padding:6px 12px; border-radius:20px; font-size:11px; cursor:pointer; transition:all 0.2s;}
         .auth-btn:hover{background:rgba(255,255,255,0.3);}
-        .auth-btn.primary{background:white; color:var(--teal); font-weight:600;}
+        
         .user-info{font-size:12px; opacity:0.9; margin-top:4px;}
 
         /* PAGES */
@@ -173,6 +173,7 @@
         <div id="auth-status" class="auth-buttons">
             <button class="auth-btn" onclick="mostrarLogin()">Iniciar sesión</button>
             <button class="auth-btn primary" onclick="mostrarRegistro()">Registrarse</button>
+            <button class="auth-btn" onclick="resetPassword()">Olvidé mi contraseña</button>
         </div>
         <div id="user-info" class="user-info" style="display:none;">
             <span id="user-email"></span>
@@ -544,7 +545,20 @@
       document.getElementById('reg-email').value = '';
       document.getElementById('reg-password').value = '';
     }
+async function resetPassword() {
+  const email = prompt("Ingresa tu correo:");
+  if (!email) return;
 
+  const { error } = await supabaseClient.auth.resetPasswordForEmail(email, {
+    redirectTo: window.location.origin
+  });
+
+  if (error) {
+    alert("Error: " + error.message);
+  } else {
+    alert("Revisa tu correo para recuperar tu contraseña");
+  }
+}
     async function cerrarSesion() {
       const { error } = await supabaseClient.auth.signOut();
 
